@@ -8,10 +8,11 @@ sns.set_style("darkgrid")
 df = pd.read_csv('./cali_dataset.csv')
 
 without = df.loc[df['county'] == 'Calaveras']
-print(without.head(10))
 without = without.drop(columns=["county", "administered_date", "california_flag"])
-print(without.head(10))
 corr = without.corr(method="pearson")
 cmap = sns.diverging_palette(250, 354, 80, 60, center='dark', as_cmap=True)
 sns.heatmap(corr, vmax=1, vmin=-.5, cmap=cmap, square=True, linewidths=.2)
+fig, axes = plt.subplots(1, 2, figsize=(18, 6), sharey=True)
+sns.histplot(without, ax=axes[0], x="total_doses", kde=True, color='r')
+sns.histplot(without, ax=axes[1], x="cumulative_total_doses", kde=True, color='b')
 plt.show()
