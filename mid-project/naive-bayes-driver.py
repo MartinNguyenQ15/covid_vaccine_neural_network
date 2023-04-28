@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from loaders import load_by_county
 from naive_bayes import naive_bayes_gaussian, naive_bayes_cat
 from visualize import show_heatmap, show_histogram
 from sklearn.model_selection import train_test_split
@@ -7,26 +8,8 @@ from sklearn.metrics import confusion_matrix, f1_score
 
 print("Naive Bayes Probability")
 print("=" * 12)
-df = pd.read_csv('./cali_dataset.csv')
-
-# Issue to resolve with f1_score if more than 2 cities
-county_list = [
-    'Calaveras',
-    # 'Lassen',
-    # 'Alpine',
-    'Plumas'
-]
-
-# Selecting columns to use for classification
-selected_columns = ['county', 'pfizer_doses', 'moderna_doses', 'jj_doses']
-
-without = df.loc[df['county'].isin(county_list)]
-for i, county in enumerate(county_list):
-    without.loc[df['county'] == county, 'county'] = i
-
-without = without[selected_columns]
-
 print("\t\tGaussian Naive Bayes")
+without, _ = load_by_county()
 train, test = train_test_split(without, test_size=.2, random_state=41)
 
 X_test = test.iloc[:,1:].values
